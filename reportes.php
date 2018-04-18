@@ -27,6 +27,12 @@
     <div class="container">
 		<div class="panel panel-info">
 		<div class="panel-heading">
+			<div class="btn-group pull-right">
+				<button type='button' class="btn btn-info" id="exportar"
+				data-toggle="tooltip" data-placement="top" title="Exportar excel">
+					<span class="glyphicon glyphicon-cloud-download" ></span>
+				</button>
+			</div>
 			<h4><i class='glyphicon glyphicon-paste'></i> Consulta de Reportes</h4>
 		</div>			
 			<div class="panel-body">

@@ -2,6 +2,8 @@
 $(document).ready(function(){
     load(1);
     init();
+    localStorage.setItem('exportar', 0);
+    localStorage.setItem('tipo_exportar', 'nada');
 });
 
 function init() {
@@ -22,14 +24,18 @@ function showGetProducto() {
 $( "#select_reporte" ).change(function() {
     var opcion = "";
     $( ".outer_div" ).hide( "slow" );
+    localStorage.setItem('exportar', 0);
     $( "select option:selected" ).each(function() {
         opcion = $( this ).val();
         if (opcion == 'cliente'){
             showGetCliente();
+            localStorage.setItem('tipo_exportar', 'cliente');
         } else if (opcion == 'producto') {
             showGetProducto();
+            localStorage.setItem('tipo_exportar', 'producto');
         } else {
             init();
+            localStorage.setItem('tipo_exportar', 'nada');
         }
     });    
 });
@@ -55,6 +61,48 @@ $('#hasta_cliente').change(function(){
     $('#fin_cliente').val(fecha);
     getClientes();
 });
+
+$( "#exportar" ).click(function() {
+    var cantidad = localStorage.getItem('exportar') * 1;
+    if(cantidad > 0) {
+        var tipo_exportar = localStorage.getItem('tipo_exportar');
+        if(tipo_exportar == 'cliente') {
+            exportClientes();
+        }else if(tipo_exportar == 'producto') {
+            exportarProductos();
+        }
+    }else{
+        alert('No hay datos para exportar');        
+    }
+});
+
+function exportClientes() {
+    var id_cliente= $("#id_cliente").val();
+    var inicio= $("#inicio_cliente").val();
+    var fin= $("#fin_cliente").val();
+    if(inicio == '') {
+        inicio = '2000-01-01';
+    }
+    if(fin == '') {
+        fin = '3000-01-01';
+    }
+    $("#loader").fadeIn('slow');
+    window.location.href = './ajax/excel.php?action=cliente&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+}
+
+function exportarProductos() {
+    var id_producto= $("#id_producto").val();
+    var inicio= $("#inicio_producto").val();
+    var fin= $("#fin_producto").val();
+    if(inicio == '') {
+        inicio = '2000-01-01';
+    }
+    if(fin == '') {
+        fin = '3000-01-01';
+    }
+    $("#loader").fadeIn('slow');
+    window.location.href = './ajax/excel.php?action=producto&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+}
 
 $(function() {
 	$("#nombre_cliente").autocomplete({

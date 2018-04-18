@@ -64,6 +64,18 @@
 
 		//loop through fetched data
 
+?>
+<input id="cantidad" type='hidden' value="<?php echo $numrows?>">	
+<script>
+	var cantidad= $("#cantidad").val();
+	if(cantidad > 0){
+		localStorage.setItem('exportar', 1);
+	}else{
+		localStorage.setItem('exportar', 0);
+	}
+</script>
+<?php
+
 		if ($numrows>0){
 
 			
