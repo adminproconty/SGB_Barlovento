@@ -42,13 +42,19 @@
 				<div class="form-group row">
 				  <label for="nombre_cliente" class="col-md-1 control-label">Cliente</label>
 				  <div class="col-md-3">
-					  <input type="text" class="form-control input-sm" id="nombre_cliente" placeholder="Selecciona un cliente" required>
+					  <input type="text" class="form-control input-sm" id="nombre_cliente" placeholder="Nombre/Cédula Cliente" required>
 					  <input id="id_cliente" type='hidden' name="id_cliente">	
 				  </div>
-				  <label for="tel1" class="col-md-1 control-label">Teléfono</label>
+				  
+				  <label for="documento_cli" class="col-md-1 control-label">Cédula</label>
 							<div class="col-md-2">
-								<input type="text" class="form-control input-sm" id="tel1" placeholder="Teléfono" readonly>
+								<input type="text" class="form-control input-sm" id="documento_cli" placeholder="Cédula" readonly>
 							</div>
+				  
+				 <!-- <label for="tel1" class="col-md-1 control-label">Teléfono</label>
+							<div class="col-md-2"> -->
+								<input type="hidden" class="form-control input-sm" id="tel1" placeholder="Teléfono" readonly>
+				 <!--			</div> -->
 					<label for="mail" class="col-md-1 control-label">Email</label>
 							<div class="col-md-3">
 								<input type="text" class="form-control input-sm" id="mail" placeholder="Email" readonly>
@@ -62,7 +68,7 @@
 							</div>
 							<label for="empresa" class="col-md-1 control-label">Vendedor</label>
 							<div class="col-md-3">
-								<select class="form-control input-sm" id="id_vendedor" name="id_vendedor">
+								<select class="form-control input-sm" id="id_vendedor" name="id_vendedor" readonly> 
 									<?php
 										$sql_vendedor=mysqli_query($con,"select * from users order by lastname");
 										while ($rw=mysqli_fetch_array($sql_vendedor)){
@@ -151,6 +157,7 @@
 								$('#tel1').val(ui.item.telefono_cliente);
 								$('#mail').val(ui.item.email_cliente);
 								$('#saldo_cliente').val(ui.item.saldo_cliente);
+								$('#documento_cli').val(ui.item.documento_cliente);
 																
 								
 							 }
@@ -165,6 +172,8 @@
 							$("#id_cliente" ).val("");
 							$("#tel1" ).val("");
 							$("#mail" ).val("");
+							$("#saldo_cliente" ).val("");
+							$("#documento" ).val("");
 											
 						}
 						if (event.keyCode==$.ui.keyCode.DELETE){
@@ -172,6 +181,8 @@
 							$("#id_cliente" ).val("");
 							$("#tel1" ).val("");
 							$("#mail" ).val("");
+							$("#saldo_cliente" ).val("");
+							$("#documento" ).val("");
 						}
 			});	
 	</script>
