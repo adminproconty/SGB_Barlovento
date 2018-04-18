@@ -1,7 +1,11 @@
 <?php
 
+require_once ("../config/db.php");//Contiene las variables de configuracion para conectar a la base de datos
+require_once ("../config/conexion.php");//Contiene funcion que conecta a la base de datos
+
 if($_GET['action'] == 'cliente') {
-    $sql="SELECT fac.`numero_factura`, 
+    if($_GET['metodo'] == 'byid'){
+        $sql="SELECT fac.`numero_factura`, 
             fac.`fecha_factura`,  cli.`documento_cliente`,
             cli.`nombre_cliente`, fac. `total_venta`
             FROM `facturas` as fac
@@ -9,8 +13,16 @@ if($_GET['action'] == 'cliente') {
             WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
             AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
             AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+    }else if($_GET['metodo'] == 'all'){
+        $sql="SELECT fac.`numero_factura`, 
+            fac.`fecha_factura`,  cli.`documento_cliente`,
+            cli.`nombre_cliente`, fac. `total_venta`
+            FROM `facturas` as fac
+            JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)";
+    }    
 }else if($_GET['action'] == 'producto'){
-    $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
+    if($_GET['metodo'] == 'byid'){
+        $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
                 df.`cantidad`, fac.`total_venta`
                 FROM `detalle_factura` as df 
                 JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
@@ -18,19 +30,23 @@ if($_GET['action'] == 'cliente') {
                 WHERE df.`id_producto` = ".$_GET['id_producto']." 
                 AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
                 AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+    }else if($_GET['metodo'] == 'all'){
+        $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
+                df.`cantidad`, fac.`total_venta`
+                FROM `detalle_factura` as df 
+                JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+                JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)";
+    } 
+}else if($_GET['action'] == 'all'){
+    $sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, 
+            df.`precio_venta`, fac.`id_cliente`, fac.`fecha_factura`,fac.`total_venta`, 
+            fac.`estado_factura`, prod.`codigo_producto`, prod.`nombre_producto`, 
+            cli.`documento_cliente`, cli.`nombre_cliente` 
+            FROM `detalle_factura` as df 
+            JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+            JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
+            JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)";
 }
-
-$servername = "localhost";
-$username = "proco389_usersgb";
-$password = "barlovento2018";
-$dbname = "proco389_sgbbarlovento";
-//mysql and db connection
-//Para servidor
-//define('DB_USER', 'proco389_usersgb');//Usuario de tu base de datos
-//define('DB_PASS', 'barlovento2018');//Contraseña del usuario de la base de datos
-//define('DB_NAME', 'proco389_sgbbarlovento');//Nombre de la base de datos
-
-$con = new mysqli($servername, $username, $password, $dbname);
 
 if ($con->connect_error) {  //error check
     die("Connection failed: " . $con->connect_error);
@@ -41,9 +57,19 @@ else
 }
 
 if($_GET['action'] == 'cliente'){
-    $filename = "ConsultaCliente".$_GET['id_cliente']."del".$_GET['inicio']."al".$_GET['fin'];  //your_file_name
+    if($_GET['metodo'] == 'byid'){
+        $filename = "ConsultaCliente".$_GET['id_cliente']."del".$_GET['inicio']."al".$_GET['fin'];  //your_file_name
+    }else if($_GET['metodo'] == 'all'){
+        $filename = "ConsultaConsumoAllClientes";  //your_file_name
+    }
 }else if($_GET['action'] == 'producto'){
-    $filename = "ConsultaProducto".$_GET['id_producto']."del".$_GET['inicio']."al".$_GET['fin'];  //your_file_name
+    if($_GET['metodo'] == 'byid'){
+        $filename = "ConsultaProducto".$_GET['id_producto']."del".$_GET['inicio']."al".$_GET['fin'];  //your_file_name
+    }else if($_GET['metodo'] == 'all'){
+        $filename = "ConsultaConsumoAllProductos";  //your_file_name
+    }
+}else if($_GET['action'] == 'all'){
+    $filename = "ConsultaDeTodosLosConsumos";  //your_file_name
 }
 
 $DB_TBLName = "clientes"; 

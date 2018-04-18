@@ -26,50 +26,26 @@
 
 		$offset = ($page - 1) * $per_page;
 
-		//Count the total number of row in your table*/
-
-		if($_GET['tipo'] == 'all'){
-
-			$count_query   = mysqli_query($con, "
-				SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-				fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-				prod.`nombre_producto` 
-				FROM `detalle_factura` as df 
-				JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-				JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-			");
-			
-			$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-                	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                	prod.`nombre_producto` 
-                	FROM `detalle_factura` as df 
-                	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)";
-
-		}else if($_GET['tipo'] == 'byid'){
-
-			$count_query   = mysqli_query($con, "
-            	SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-            	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-            	prod.`nombre_producto` 
-            	FROM `detalle_factura` as df 
-            	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-            	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-            	WHERE df.`id_producto` = ".$_GET['id_producto']." 
-            	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            	AND fac.`fecha_factura` <= '".$_GET['fin']."'
-        	");
-			
-			$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-                fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                prod.`nombre_producto` 
+        //Count the total number of row in your table*/
+        $count_query   = mysqli_query($con, "
+                SELECT count(df.`numero_factura`) as numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
+                fac.`id_cliente`, fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, 
+                prod.`codigo_producto`, prod.`nombre_producto`, cli.`documento_cliente`, 
+                cli.`nombre_cliente` 
                 FROM `detalle_factura` as df 
                 JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-                WHERE df.`id_producto` = ".$_GET['id_producto']." 
-                AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                AND fac.`fecha_factura` <= '".$_GET['fin']."'";
-		}   
+                JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
+                JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+            ");
+        
+        $sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
+                fac.`id_cliente`, fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, 
+                prod.`codigo_producto`, prod.`nombre_producto`, cli.`documento_cliente`, 
+                cli.`nombre_cliente`, df.`precio_venta`
+                FROM `detalle_factura` as df 
+                JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+                JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
+                JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)";
 
 		$row= mysqli_fetch_array($count_query);
 
@@ -107,15 +83,21 @@
 
 				<tr  class="info">
 
+					<th>#</th>
+
 					<th>Fecha</th>
 
-					<th>Código</th>
+					<th>Documento</th>
 
-					<th>Nombre</th>
+					<th>Nombre Cliente</th>
+
+					<th>Código Producto</th>
+
+					<th>Nombre Producto</th>
 
 					<th class="text-center">Cantidad</th>
 
-					<th class="text-center">Total Venta</th>
+					<th class="text-center">Precio Venta</th>
 
 					
 
@@ -125,7 +107,13 @@
 
 				while ($row=mysqli_fetch_array($query)){
 
+                        $factura= $row['numero_factura'];  
+
                         $date= date('d/m/Y', strtotime($row['fecha_factura']));    
+
+                        $documento= $row['documento_cliente']; 
+
+                        $cliente= $row['nombre_cliente'];    
 
                         $cod=$row['codigo_producto'];
 
@@ -133,15 +121,20 @@
 
 						$cantidad=$row['cantidad'];
 
-						$total=$row['total_venta'];
+						$total=$row['precio_venta'];
 						
 
 					?>
 				
 
 					<tr>
+                        <td><?php echo $factura; ?></td>                        
 
 						<td><?php echo $date; ?></td>
+
+                        <td><?php echo $documento; ?></td>
+                        
+                        <td><?php echo $cliente; ?></td>
 
 						<td><?php echo $cod; ?></td>
 

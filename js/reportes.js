@@ -4,11 +4,13 @@ $(document).ready(function(){
     init();
     localStorage.setItem('exportar', 0);
     localStorage.setItem('tipo_exportar', 'nada');
+    localStorage.setItem('metodo_exportar', 'all');
 });
 
 function init() {
     $( "#form_busq_cliente" ).hide( "slow" );
     $( "#form_busq_producto" ).hide( "slow" );
+    getAll();
 }
 
 function showGetCliente() {
@@ -30,9 +32,11 @@ $( "#select_reporte" ).change(function() {
         if (opcion == 'cliente'){
             showGetCliente();
             localStorage.setItem('tipo_exportar', 'cliente');
+            getClientes(0);
         } else if (opcion == 'producto') {
             showGetProducto();
             localStorage.setItem('tipo_exportar', 'producto');
+            getProductos(0);
         } else {
             init();
             localStorage.setItem('tipo_exportar', 'nada');
@@ -48,7 +52,7 @@ $('#desde_producto').change(function(){
 $('#hasta_producto').change(function(){
     var fecha = ''+this.value+'';
     $('#fin_producto').val(fecha);
-    getProductos();
+    getProductos(1);
 });
 
 $('#desde_cliente').change(function(){
@@ -59,7 +63,7 @@ $('#desde_cliente').change(function(){
 $('#hasta_cliente').change(function(){
     var fecha = ''+this.value+'';
     $('#fin_cliente').val(fecha);
-    getClientes();
+    getClientes(1);
 });
 
 $( "#exportar" ).click(function() {
@@ -70,6 +74,8 @@ $( "#exportar" ).click(function() {
             exportClientes();
         }else if(tipo_exportar == 'producto') {
             exportarProductos();
+        }else{
+            exportarAll();
         }
     }else{
         alert('No hay datos para exportar');        
@@ -87,7 +93,12 @@ function exportClientes() {
         fin = '3000-01-01';
     }
     $("#loader").fadeIn('slow');
-    window.location.href = './ajax/excel.php?action=cliente&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+    var metodo = localStorage.getItem('metodo_exportar');
+    if(metodo == 'all') {
+        window.location.href = './ajax/excel.php?action=cliente&metodo=all';
+    }else if(metodo == 'byid'){
+        window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+    }
 }
 
 function exportarProductos() {
@@ -101,7 +112,16 @@ function exportarProductos() {
         fin = '3000-01-01';
     }
     $("#loader").fadeIn('slow');
-    window.location.href = './ajax/excel.php?action=producto&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+    var metodo = localStorage.getItem('metodo_exportar');
+    if(metodo == 'all') {
+        window.location.href = './ajax/excel.php?action=producto&metodo=all';
+    }else if(metodo == 'byid'){
+        window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+    }
+}
+
+function exportarAll() {
+    window.location.href = './ajax/excel.php?action=all';
 }
 
 $(function() {
@@ -115,7 +135,7 @@ $(function() {
             $('#tel1').val(ui.item.telefono_cliente);
             $('#mail').val(ui.item.email_cliente);
             $('#saldo_cliente').val(ui.item.saldo_cliente);
-            getClientes();
+            getClientes(1);
         }
     });
     
@@ -127,25 +147,33 @@ $(function() {
             $('#id_producto').val(ui.item.id_producto);
             $('#codigo_producto').val(ui.item.codigo_producto);
             $('#nombre_producto').val(ui.item.nombre_producto);
-            getProductos();
+            getProductos(1);
         }
     });	
 						
 });	
 
-function getClientes() {
-    var id_cliente= $("#id_cliente").val();
-    var inicio= $("#inicio_cliente").val();
-    var fin= $("#fin_cliente").val();
-    if(inicio == '') {
-        inicio = '2000-01-01';
-    }
-    if(fin == '') {
-        fin = '3000-01-01';
-    }
+function getClientes(tipo) {
+    var url = '';
+    if(tipo == 0){
+        url = './ajax/reporte_cliente.php?action=ajax&tipo=all';
+        localStorage.setItem('metodo_exportar', 'all');
+    }else{
+        var id_cliente= $("#id_cliente").val();
+        var inicio= $("#inicio_cliente").val();
+        var fin= $("#fin_cliente").val();
+        if(inicio == '') {
+            inicio = '2000-01-01';
+        }
+        if(fin == '') {
+            fin = '3000-01-01';
+        }
+        url = './ajax/reporte_cliente.php?action=ajax&tipo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+        localStorage.setItem('metodo_exportar', 'byid');
+    }    
 	$("#loader").fadeIn('slow');
 	$.ajax({
-		url:'./ajax/reporte_cliente.php?action=ajax&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin,
+		url: url,
 		beforeSend: function(objeto){
 			$('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
 		},
@@ -156,19 +184,42 @@ function getClientes() {
 	})
 }
 
-function getProductos() {
-    var id_producto= $("#id_producto").val();
-    var inicio= $("#inicio_producto").val();
-    var fin= $("#fin_producto").val();
-    if(inicio == '') {
-        inicio = '2000-01-01';
-    }
-    if(fin == '') {
-        fin = '3000-01-01';
-    }
+function getProductos(tipo) {
+    var url = '';
+    if(tipo == 0){
+        url = './ajax/reporte_producto.php?action=ajax&tipo=all';
+        localStorage.setItem('metodo_exportar', 'all');
+    }else{
+        var id_producto= $("#id_producto").val();
+        var inicio= $("#inicio_producto").val();
+        var fin= $("#fin_producto").val();
+        if(inicio == '') {
+            inicio = '2000-01-01';
+        }
+        if(fin == '') {
+            fin = '3000-01-01';
+        }
+        url = './ajax/reporte_producto.php?action=ajax&tipo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+        localStorage.setItem('metodo_exportar', 'byid');
+    }    
 	$("#loader").fadeIn('slow');
 	$.ajax({
-		url:'./ajax/reporte_producto.php?action=ajax&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin,
+		url: url,
+		beforeSend: function(objeto){
+			$('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+		},
+		success:function(data){
+			$(".outer_div").html(data).fadeIn('slow');
+            $('#loader').html('');
+        }
+	})
+}
+
+function getAll() {
+    var url = './ajax/report_all.php?action=ajax';
+	$("#loader").fadeIn('slow');
+	$.ajax({
+		url: url,
 		beforeSend: function(objeto){
 			$('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
 		},
