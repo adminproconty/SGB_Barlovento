@@ -31,7 +31,7 @@ if ($login->isUserLoggedIn() == true) {
 	$fecha_factura = $rowsaldo['fecha_factura'];
 	$ultimo_mes = date("n", strtotime($fecha_factura));
 	$mes_actual = date("n"); 
-	$saldo_mensual = 100;
+	$saldo_mensual = 40;
 	if ($mes_actual != $ultimo_mes){
 		$sql_update_saldo="UPDATE clientes SET saldo_cliente= ".$saldo_mensual." where 1";
 		$query_update = mysqli_query($con,$sql_update_saldo);
