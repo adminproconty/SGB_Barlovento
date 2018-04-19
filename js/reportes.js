@@ -97,7 +97,11 @@ function exportClientes() {
     if(metodo == 'all') {
         window.location.href = './ajax/excel.php?action=cliente&metodo=all';
     }else if(metodo == 'byid'){
-        window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+        if(id_cliente == ''){
+            window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente=nada&inicio='+inicio+'&fin='+fin;
+        }else{
+            window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+        }
     }
 }
 
@@ -116,7 +120,11 @@ function exportarProductos() {
     if(metodo == 'all') {
         window.location.href = './ajax/excel.php?action=producto&metodo=all';
     }else if(metodo == 'byid'){
-        window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+        if(id_producto == ''){
+            window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto=nada&inicio='+inicio+'&fin='+fin;
+        } else {
+            window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+        }
     }
 }
 
@@ -158,30 +166,48 @@ function getClientes(tipo) {
     if(tipo == 0){
         url = './ajax/reporte_cliente.php?action=ajax&tipo=all';
         localStorage.setItem('metodo_exportar', 'all');
+        $("#loader").fadeIn('slow');
+	        $.ajax({
+		    url: url,
+		    beforeSend: function(objeto){
+			    $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+		    },
+		    success:function(data){
+			    $(".outer_div").html(data).fadeIn('slow');
+                $('#loader').html('');
+            }
+	    })
     }else{
         var id_cliente= $("#id_cliente").val();
         var inicio= $("#inicio_cliente").val();
         var fin= $("#fin_cliente").val();
-        if(inicio == '') {
-            inicio = '2000-01-01';
-        }
-        if(fin == '') {
-            fin = '3000-01-01';
-        }
-        url = './ajax/reporte_cliente.php?action=ajax&tipo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
-        localStorage.setItem('metodo_exportar', 'byid');
-    }    
-	$("#loader").fadeIn('slow');
-	$.ajax({
-		url: url,
-		beforeSend: function(objeto){
-			$('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
-		},
-		success:function(data){
-			$(".outer_div").html(data).fadeIn('slow');
-            $('#loader').html('');
-        }
-	})
+        if(inicio == '' || fin == ''){
+            alert('Debe seleccionar un rango de fecha');
+        }else{
+            if(inicio == '') {
+                inicio = '2000-01-01';
+            }
+            if(fin == '') {
+                fin = '3000-01-01';
+            }
+            url = './ajax/reporte_cliente.php?action=ajax&tipo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+            localStorage.setItem('metodo_exportar', 'byid');
+            if(id_cliente == ''){
+                url = './ajax/reporte_cliente.php?action=ajax&tipo=byid&id_cliente=nada&inicio='+inicio+'&fin='+fin;
+            }
+            $("#loader").fadeIn('slow');
+	        $.ajax({
+    		    url: url,
+		        beforeSend: function(objeto){
+			        $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+		        },
+		        success:function(data){
+			        $(".outer_div").html(data).fadeIn('slow');
+                    $('#loader').html('');
+                }
+	        })
+        }    
+    }   
 }
 
 function getProductos(tipo) {
@@ -189,30 +215,48 @@ function getProductos(tipo) {
     if(tipo == 0){
         url = './ajax/reporte_producto.php?action=ajax&tipo=all';
         localStorage.setItem('metodo_exportar', 'all');
+        $("#loader").fadeIn('slow');
+	    $.ajax({
+    		url: url,
+		    beforeSend: function(objeto){
+			    $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+		    },
+		    success:function(data){
+			    $(".outer_div").html(data).fadeIn('slow');
+                $('#loader').html('');
+            }
+	    });
     }else{
         var id_producto= $("#id_producto").val();
         var inicio= $("#inicio_producto").val();
         var fin= $("#fin_producto").val();
-        if(inicio == '') {
-            inicio = '2000-01-01';
-        }
-        if(fin == '') {
-            fin = '3000-01-01';
-        }
-        url = './ajax/reporte_producto.php?action=ajax&tipo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
-        localStorage.setItem('metodo_exportar', 'byid');
-    }    
-	$("#loader").fadeIn('slow');
-	$.ajax({
-		url: url,
-		beforeSend: function(objeto){
-			$('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
-		},
-		success:function(data){
-			$(".outer_div").html(data).fadeIn('slow');
-            $('#loader').html('');
-        }
-	})
+        if(inicio == '' || fin == ''){
+            alert('Debe seleccionar un rango de fecha');
+        }else{
+            if(inicio == '') {
+                inicio = '2000-01-01';
+            }
+            if(fin == '') {
+                fin = '3000-01-01';
+            }
+            url = './ajax/reporte_producto.php?action=ajax&tipo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+            localStorage.setItem('metodo_exportar', 'byid');
+            if(id_producto == '') {
+                url = './ajax/reporte_producto.php?action=ajax&tipo=byid&id_producto=nada&inicio='+inicio+'&fin='+fin; 
+            }
+            $("#loader").fadeIn('slow');
+            $.ajax({
+                url: url,
+                beforeSend: function(objeto){
+                    $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+                },
+                success:function(data){
+                    $(".outer_div").html(data).fadeIn('slow');
+                    $('#loader').html('');
+                }
+            });
+        }              
+    }  
 }
 
 function getAll() {

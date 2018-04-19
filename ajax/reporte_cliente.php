@@ -44,23 +44,44 @@
 
 		}else if($_GET['tipo'] == 'byid'){
 
-			$count_query   = mysqli_query($con, "
-            	SELECT count(fac.`id_factura`) as numrows, fac.`numero_factura`, fac.`fecha_factura`, fac.`id_cliente`, 
-            	cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
-            	FROM `facturas` as fac
-            	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-            	WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
-            	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            	AND fac.`fecha_factura` <= '".$_GET['fin']."'
-			");
+			if($_GET['id_cliente'] == 'nada') {
+
+				$count_query   = mysqli_query($con, "
+            		SELECT count(fac.`id_factura`) as numrows, fac.`numero_factura`, fac.`fecha_factura`, fac.`id_cliente`, 
+            		cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+            		FROM `facturas` as fac
+            		JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+            		WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
+            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+				");
 			
-			$sql="SELECT fac.`id_factura`, fac.`numero_factura`, fac.`fecha_factura`, 
-                fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
-                FROM `facturas` as fac
-                JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-                WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
-                AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+				$sql="SELECT fac.`id_factura`, fac.`numero_factura`, fac.`fecha_factura`, 
+                	fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+                	FROM `facturas` as fac
+                	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
+                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+
+			} else {
+				
+				$count_query   = mysqli_query($con, "
+            		SELECT count(fac.`id_factura`) as numrows, fac.`numero_factura`, fac.`fecha_factura`, fac.`id_cliente`, 
+            		cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+            		FROM `facturas` as fac
+            		JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+            		WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
+            		AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
+            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+				");
+			
+				$sql="SELECT fac.`id_factura`, fac.`numero_factura`, fac.`fecha_factura`, 
+                	fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+                	FROM `facturas` as fac
+                	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+                	WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
+                	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
+                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+			}
 		}       
         
 

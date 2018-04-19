@@ -5,14 +5,24 @@ require_once ("../config/conexion.php");//Contiene funcion que conecta a la base
 
 if($_GET['action'] == 'cliente') {
     if($_GET['metodo'] == 'byid'){
-        $sql="SELECT fac.`numero_factura`, 
-            fac.`fecha_factura`,  cli.`documento_cliente`,
-            cli.`nombre_cliente`, fac. `total_venta`
-            FROM `facturas` as fac
-            JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-            WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
-            AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+        if($_GET['id_cliente'] == 'nada') {
+            $sql="SELECT fac.`numero_factura`, 
+                    fac.`fecha_factura`,  cli.`documento_cliente`,
+                    cli.`nombre_cliente`, fac. `total_venta`
+                    FROM `facturas` as fac
+                    JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+                    WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
+                    AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+        } else {
+            $sql="SELECT fac.`numero_factura`, 
+                    fac.`fecha_factura`,  cli.`documento_cliente`,
+                    cli.`nombre_cliente`, fac. `total_venta`
+                    FROM `facturas` as fac
+                    JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+                    WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
+                    AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
+                    AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+        }        
     }else if($_GET['metodo'] == 'all'){
         $sql="SELECT fac.`numero_factura`, 
             fac.`fecha_factura`,  cli.`documento_cliente`,
@@ -22,7 +32,16 @@ if($_GET['action'] == 'cliente') {
     }    
 }else if($_GET['action'] == 'producto'){
     if($_GET['metodo'] == 'byid'){
-        $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
+        if($_GET['id_producto'] == 'nada'){
+            $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
+                df.`cantidad`, fac.`total_venta`
+                FROM `detalle_factura` as df 
+                JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+                JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
+                WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
+                AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+        }else{
+            $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
                 df.`cantidad`, fac.`total_venta`
                 FROM `detalle_factura` as df 
                 JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
@@ -30,6 +49,7 @@ if($_GET['action'] == 'cliente') {
                 WHERE df.`id_producto` = ".$_GET['id_producto']." 
                 AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
                 AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+        }        
     }else if($_GET['metodo'] == 'all'){
         $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
                 df.`cantidad`, fac.`total_venta`

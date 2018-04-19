@@ -48,27 +48,55 @@
 
 		}else if($_GET['tipo'] == 'byid'){
 
-			$count_query   = mysqli_query($con, "
-            	SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-            	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-            	prod.`nombre_producto` 
-            	FROM `detalle_factura` as df 
-            	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-            	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-            	WHERE df.`id_producto` = ".$_GET['id_producto']." 
-            	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            	AND fac.`fecha_factura` <= '".$_GET['fin']."'
-        	");
+			if($_GET['id_producto'] == 'nada') {
+
+				$count_query   = mysqli_query($con, "
+            		SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
+            		fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
+            		prod.`nombre_producto` 
+            		FROM `detalle_factura` as df 
+            		JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+            		JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
+            		WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
+            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+        		");
 			
-			$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-                fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                prod.`nombre_producto` 
-                FROM `detalle_factura` as df 
-                JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-                WHERE df.`id_producto` = ".$_GET['id_producto']." 
-                AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+				$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
+                	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
+                	prod.`nombre_producto` 
+                	FROM `detalle_factura` as df 
+                	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+                	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
+                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
+                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+
+			} else {
+
+				$count_query   = mysqli_query($con, "
+            		SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
+            		fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
+            		prod.`nombre_producto` 
+            		FROM `detalle_factura` as df 
+            		JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+            		JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
+            		WHERE df.`id_producto` = ".$_GET['id_producto']." 
+            		AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
+            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+        		");
+			
+				$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
+                	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
+                	prod.`nombre_producto` 
+                	FROM `detalle_factura` as df 
+                	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+                	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
+                	WHERE df.`id_producto` = ".$_GET['id_producto']." 
+                	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
+                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+
+			}
+
+			
 		}   
 
 		$row= mysqli_fetch_array($count_query);
