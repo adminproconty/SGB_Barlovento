@@ -70,7 +70,7 @@
 							<div class="col-md-3">
 								<select class="form-control input-sm" id="id_vendedor" name="id_vendedor" readonly> 
 									<?php
-										$sql_vendedor=mysqli_query($con,"select * from users order by lastname");
+										$sql_vendedor=mysqli_query($con,"select * from users where user_id = ".$_SESSION['user_id']." order by lastname");
 										while ($rw=mysqli_fetch_array($sql_vendedor)){
 											$id_vendedor=$rw["user_id"];
 											$nombre_vendedor=$rw["firstname"]." ".$rw["lastname"];
