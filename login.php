@@ -22,7 +22,24 @@ $login = new Login();
 if ($login->isUserLoggedIn() == true) {
     // the user is logged in. you can do whatever you want here.
     // for demonstration purposes, we simply show the "you are logged in" view.
-   header("location: facturas.php");
+   
+	//PARA COLOCAR SALDO
+	require_once ("config/conexion.php");
+	$query_saldo=mysqli_query($con,"select max(fecha_factura) fecha_factura from facturas ");
+	$rowsaldo=mysqli_fetch_array($query_saldo);
+
+	$fecha_factura = $rowsaldo['fecha_factura'];
+	$ultimo_mes = date("n", strtotime($fecha_factura));
+	$mes_actual = date("n"); 
+	$saldo_mensual = 100;
+	if ($mes_actual != $ultimo_mes){
+		$sql_update_saldo="UPDATE clientes SET saldo_cliente= ".$saldo_mensual." where 1";
+		$query_update = mysqli_query($con,$sql_update_saldo);
+		//echo "actualizo saldo";
+	} 
+	
+
+	header("location: facturas.php");
 
 } else {
     // the user is not logged in. you can do whatever you want here.
