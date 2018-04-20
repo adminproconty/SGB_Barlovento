@@ -37,6 +37,7 @@
 			include("modal/buscar_productos.php");
 			include("modal/registro_clientes.php");
 			include("modal/registro_productos.php");
+			include("modal/consulta_productos.php");
 		?>
 			<form class="form-horizontal" role="form" id="datos_factura" method="get" action="./pdf/documentos/factura_pdf.php">
 				<div class="form-group row">
@@ -107,6 +108,9 @@
 				
 				<div class="col-md-12">
 					<div class="pull-right">
+						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#consultaProducto">
+						 <span class="glyphicon glyphicon-search"></span> Consulta productos
+						</button>
 						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
 						 <span class="glyphicon glyphicon-search"></span> Agregar productos
 						</button>
