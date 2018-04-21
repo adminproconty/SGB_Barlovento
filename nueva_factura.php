@@ -112,7 +112,7 @@
 						 <span class="glyphicon glyphicon-search"></span> Consulta productos
 						</button>
 						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-						 <span class="glyphicon glyphicon-search"></span> Agregar productos
+						 <span class="glyphicon glyphicon-plus"></span> Agregar productos
 						</button>
 						<button type="submit" class="btn btn-success" id="btn-comprar">
 						  <span class="glyphicon glyphicon-shopping-cart"></span> Comprar

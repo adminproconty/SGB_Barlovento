@@ -120,7 +120,7 @@
                     
                     $iva = number_format($iva,2,'.','');
 
-					$total = $iva + $precio_venta;
+					$total = number_format($iva + $precio_venta,2,'.','');
 
 					?>
 
