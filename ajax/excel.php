@@ -76,19 +76,33 @@ else
 
 }
 
+$nombre_reporte = '';
+$tipo_reporte = '';
+$fechaini = '';
+$fechafin = '';
+
 if($_GET['action'] == 'cliente'){
+    $nombre_reporte = 'REPORTE DE VENTAS POR CLIENTE';
     if($_GET['metodo'] == 'byid'){
         $filename = "ConsultaCliente".$_GET['id_cliente']."del".$_GET['inicio']."al".$_GET['fin'];  //your_file_name
+        $tipo_reporte = $_GET['nombre_cliente'];
+        $fechaini = $_GET['inicio'];
+        $fechafin = $_GET['fin'];
     }else if($_GET['metodo'] == 'all'){
         $filename = "ConsultaConsumoAllClientes";  //your_file_name
     }
 }else if($_GET['action'] == 'producto'){
+    $nombre_reporte = 'REPORTE DE VENTAS POR PRODUCTO';
     if($_GET['metodo'] == 'byid'){
         $filename = "ConsultaProducto".$_GET['id_producto']."del".$_GET['inicio']."al".$_GET['fin'];  //your_file_name
+        $tipo_reporte = $_GET['nombre_producto'];
+        $fechaini = $_GET['inicio'];
+        $fechafin = $_GET['fin'];
     }else if($_GET['metodo'] == 'all'){
         $filename = "ConsultaConsumoAllProductos";  //your_file_name
     }
 }else if($_GET['action'] == 'all'){
+    $nombre_reporte = 'REPORTE DE VENTAS GENERAL';
     $filename = "ConsultaDeTodosLosConsumos";  //your_file_name
 }
 
@@ -100,6 +114,21 @@ header("Content-Disposition: attachment; filename=$filename.xls");
 header("Pragma: no-cache"); 
 header("Expires: 0");
 
+//cabecera del reporte
+echo "CLIENTE: $nombre_reporte";
+print("\n");   
+if ($tipo_reporte != ''){
+    echo $tipo_reporte;
+    print("\n");   
+} 
+if ($fechaini != ''){
+    echo "DESDE: $fechaini";
+    print("\n");   
+    echo "HASTA: $fechafin";
+    print("\n");   
+}
+print("\n");    
+// fin cabecera
 $sep = "\t";
 $resultt = $con->query($sql);
 $utf8 = $con->set_charset("SET NAMES 'utf8'");

@@ -86,6 +86,7 @@ function exportClientes() {
     var id_cliente= $("#id_cliente").val();
     var inicio= $("#inicio_cliente").val();
     var fin= $("#fin_cliente").val();
+    var nombre_cliente= $("#nombre_cliente").val();
     if(inicio == '') {
         inicio = '2000-01-01';
     }
@@ -100,7 +101,7 @@ function exportClientes() {
         if(id_cliente == ''){
             window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente=nada&inicio='+inicio+'&fin='+fin;
         }else{
-            window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+            window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin+'&nombre_cliente='+nombre_cliente;
         }
     }
 }
@@ -109,6 +110,7 @@ function exportarProductos() {
     var id_producto= $("#id_producto").val();
     var inicio= $("#inicio_producto").val();
     var fin= $("#fin_producto").val();
+    var nombre_producto= $("#nombre_producto").val();
     if(inicio == '') {
         inicio = '2000-01-01';
     }
@@ -123,7 +125,7 @@ function exportarProductos() {
         if(id_producto == ''){
             window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto=nada&inicio='+inicio+'&fin='+fin;
         } else {
-            window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
+            window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin+'&nombre_producto='+nombre_producto;
         }
     }
 }
