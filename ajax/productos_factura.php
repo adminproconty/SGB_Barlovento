@@ -137,7 +137,7 @@
 
 						<td class='col-xs-2'><div class="pull-right">
 
-						<input type="text" class="form-control" style="text-align:right" id="precio_venta_<?php echo $id_producto; ?>"  value="<?php echo $precio_venta;?>" >
+						<input readonly type="text" class="form-control" style="text-align:right" id="precio_venta_<?php echo $id_producto; ?>"  value="<?php echo $precio_venta;?>" >
 
 						</div></td>
 
