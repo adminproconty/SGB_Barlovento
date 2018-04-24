@@ -5,6 +5,7 @@
 		});
 
 		function load(page){
+			init(page);
 			var q= $("#q").val();
 			$("#loader").fadeIn('slow');
 			$.ajax({
@@ -30,9 +31,8 @@
 				success:function(data){
 					$(".productos").html(data).fadeIn('slow');
 					$('#loader').html('');
-					
 				}
-			});
+			})		
 		}
 
 	function agregar (id)
@@ -150,3 +150,11 @@
 			});
 		  event.preventDefault();
 		})
+
+		$('#getproductos').click(function() {
+			load(1);
+		});
+
+		$('#addproducto').click(function() {
+			load(1);
+		});

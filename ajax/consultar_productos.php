@@ -30,6 +30,9 @@
 
 		{
 
+			$sWhere = "WHERE `nombre_producto` LIKE '%".$_GET['q']."%' 
+						OR `codigo_producto` LIKE '%".$_GET['q']."%'";
+			
 			$sWhere = "WHERE (";
 
 			for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -96,7 +99,7 @@
 
 					<th><span class="pull-right">Precio</span></th>
 
-					<th><span class="pull-right">I.V.A.(12%)</span></th>
+					<th><span class="pull-right">I.V.A. 12%</span></th>
 
 					<th><span class="pull-right">Precio Total</span></th>
 
@@ -108,19 +111,19 @@
 
 					$id_producto=$row['id_producto'];
 
-					$codigo_producto=$row['codigo_producto'];
-
 					$nombre_producto=$row['nombre_producto'];
+
+					$codigo_producto=$row['codigo_producto'];
 
 					$precio_venta=$row["precio_producto"];
 
 					$precio_venta=number_format($precio_venta,2,'.','');
 
-                    $iva = $precio_venta * 0.12;
-                    
-                    $iva = number_format($iva,2,'.','');
+					$iva = $precio_venta * 0.12;
 
-					$total = number_format($iva + $precio_venta,2,'.','');
+					$iva=number_format($iva,2,'.','');
+
+					$total = $iva + $precio_venta;
 
 					?>
 
@@ -130,33 +133,28 @@
 
 						<td><?php echo $nombre_producto; ?></td>
 
-						<td class='col-xs-1'>
-
+						<td>
+						
 							<div class="pull-right">
-
-								<?php echo $precio_venta;?>
-
+								<?php echo $precio_venta; ?>
 							</div>
+						
 						</td>
 
-						<td class='col-xs-2'>
-							
+						<td>
+						
 							<div class="pull-right">
-
-								<?php echo $iva;?>
-
+								<?php echo $iva; ?>
 							</div>
-
+						
 						</td>
 
-						<td class='col-xs-2'>
-							
+						<td>
+						
 							<div class="pull-right">
-
-								<?php echo $total;?>
-
+								<?php echo $total; ?>
 							</div>
-
+						
 						</td>
 
 					</tr>

@@ -108,10 +108,10 @@
 				
 				<div class="col-md-12">
 					<div class="pull-right">
-						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#consultaProducto">
+						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#consultaProducto" id="getproductos">
 						 <span class="glyphicon glyphicon-search"></span> Consulta productos
 						</button>
-						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" id="addproducto">
 						 <span class="glyphicon glyphicon-plus"></span> Agregar productos
 						</button>
 						<button type="submit" class="btn btn-success" id="btn-comprar">

@@ -80,6 +80,16 @@ $( "#exportar" ).click(function() {
     }else{
         alert('No hay datos para exportar');        
     }
+    $("#select_reporte").val('');  
+    $( "#form_busq_cliente" ).hide( "slow" );
+    $( "#form_busq_producto" ).hide( "slow" );
+    $('#desde_producto').val('');
+    $('#hasta_producto').val('');
+    $('#desde_cliente').val('');
+    $('#hasta_cliente').val('');
+    $('#nombre_producto').val('');
+    $('#nombre_cliente').val('');
+    getAll();  
 });
 
 function exportClientes() {
@@ -131,7 +141,7 @@ function exportarProductos() {
 }
 
 function exportarAll() {
-    window.location.href = './ajax/excel.php?action=all';
+    window.location.href = './ajax/excel.php?action=all';    
 }
 
 $(function() {
