@@ -52,16 +52,16 @@
 					cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
 					FROM `facturas` as fac
 					JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-            		WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+            		WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
 					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`
 				");
 			
 				$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
                 	FROM `facturas` as fac
                 	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
 					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
 
 			} else {
@@ -72,8 +72,8 @@
 					FROM `facturas` as fac
 					JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
             		WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
-            		AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+            		AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
 					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`
 				");
 			
@@ -81,8 +81,8 @@
                 	FROM `facturas` as fac
                 	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                 	WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
-                	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+                	AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
 					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
 			}
 		}       

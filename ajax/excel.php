@@ -9,16 +9,16 @@ if($_GET['action'] == 'cliente') {
             $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, round(sum(fac. `total_venta`),2) as total_venta
                     FROM `facturas` as fac
                     JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-                    WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                    AND fac.`fecha_factura` <= '".$_GET['fin']."'
+                    WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+                    AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
                     GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
         } else {
             $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, round(sum(fac. `total_venta`),2) as total_venta
                     FROM `facturas` as fac
                     JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                     WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
-                    AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                    AND fac.`fecha_factura` <= '".$_GET['fin']."'
+                    AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+                    AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
                     GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
         }        
     }else if($_GET['metodo'] == 'all'){
@@ -35,8 +35,8 @@ if($_GET['action'] == 'cliente') {
                 FROM `detalle_factura` as df 
                 JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
                 JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-                WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+                WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+                AND fac.`fecha_factura` <= '".$_GET['fin']."' 23:59:59";
         }else{
             $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
                 df.`cantidad`, fac.`total_venta`
@@ -44,8 +44,8 @@ if($_GET['action'] == 'cliente') {
                 JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
                 JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
                 WHERE df.`id_producto` = ".$_GET['id_producto']." 
-                AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+                AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+                AND fac.`fecha_factura` <= '".$_GET['fin']."' 23:59:59";
         }        
     }else if($_GET['metodo'] == 'all'){
         $sql="SELECT fac.`fecha_factura`, prod.`codigo_producto`, prod.`nombre_producto`,
