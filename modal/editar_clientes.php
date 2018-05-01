@@ -60,6 +60,19 @@
 				</div>
 			  </div>
 			  
+				<div class="form-group">
+				<label for="mod_empresa" class="col-sm-3 control-label">Empresa</label>
+				<div class="col-sm-8">
+				 <select class="form-control" id="mod_empresa" name="mod_empresa" required>
+					<option value="">-- Selecciona Empresa --</option>
+					<option value="Asur" selected>Asur</option>
+					<option value="Ecuabamba">Ecuabamba</option>
+					<option value="Corposur">Corposur</option>
+					<option value="Andares">Andares</option>
+				  </select>
+				</div>
+			  </div>
+
 			  <div class="form-group">
 				<label for="mod_estado" class="col-sm-3 control-label">Estado</label>
 				<div class="col-sm-8">

@@ -90,6 +90,7 @@ $( "#editar_cliente" ).submit(function( event ) {
 			var status_cliente = $("#status_cliente"+id).val();
 			var saldo_cliente = $("#saldo_cliente"+id).val();
 			var documento_cliente = $("#documento_cliente"+id).val();
+			var empresa_cliente = $("#empresa_cliente"+id).val();
 	
 			$("#mod_codigo").val(codigo);
 			$("#mod_nombre").val(nombre_cliente);
@@ -100,6 +101,7 @@ $( "#editar_cliente" ).submit(function( event ) {
 			$("#mod_saldo").val(saldo_cliente);
 			$("#mod_id").val(id);
 			$("#mod_documento").val(documento_cliente);
+			$("#mod_empresa").val(empresa_cliente);
 		
 		}
 	

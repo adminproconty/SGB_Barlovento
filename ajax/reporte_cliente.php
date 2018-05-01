@@ -32,55 +32,58 @@
 
 			$count_query   = mysqli_query($con, "
             	SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
-            	cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+            	cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
             	FROM `facturas` as fac
-            	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+				JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+				GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`
 			");
 			
-			$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, sum(fac. `total_venta`) as total_venta
+			$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
                 FROM `facturas` as fac
 				JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-				GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`";
+				GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
 
 		}else if($_GET['tipo'] == 'byid'){
 
 			if($_GET['id_cliente'] == 'nada') {
 
 				$count_query   = mysqli_query($con, "
-            		SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
-					cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
-            		FROM `facturas` as fac
-            		JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+					SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
+					cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
+					FROM `facturas` as fac
+					JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
             		WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`
 				");
 			
-				$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, sum(fac. `total_venta`) as total_venta
+				$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
                 	FROM `facturas` as fac
                 	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                 	WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
 					AND fac.`fecha_factura` <= '".$_GET['fin']."'
-					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`";
+					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
 
 			} else {
 				
 				$count_query   = mysqli_query($con, "
-            		SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
-            	cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
-            		FROM `facturas` as fac
-            		JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+					SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
+					cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
+					FROM `facturas` as fac
+					JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
             		WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
             		AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`
 				");
 			
-				$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, sum(fac. `total_venta`) as total_venta
+				$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
                 	FROM `facturas` as fac
                 	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                 	WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
                 	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
 					AND fac.`fecha_factura` <= '".$_GET['fin']."'
-					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`";
+					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
 			}
 		}       
         
@@ -131,6 +134,8 @@
 
 					<th>Nombre Cliente</th>
 
+					<th>Empresa</th>
+
 					<th class="text-center">Total Venta</th>
 
 					
@@ -149,6 +154,8 @@
 
 						$nombre=$row['nombre_cliente'];
 
+						$empresa_cliente=$row['empresa_cliente'];
+
 						$total=number_format($row['total_venta'],2,'.','');
 						
 						
@@ -164,6 +171,8 @@
 						<td><?php echo $documento; ?></td>
 
 						<td><?php echo $nombre; ?></td>
+
+						<td><?php echo $empresa_cliente; ?></td>
 
 						<td class="text-center">$<?php echo $total;?></td>						
 
