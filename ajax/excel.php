@@ -6,14 +6,14 @@ require_once ("../config/conexion.php");//Contiene funcion que conecta a la base
 if($_GET['action'] == 'cliente') {
     if($_GET['metodo'] == 'byid'){
         if($_GET['id_cliente'] == 'nada') {
-            $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
+            $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, round(sum(fac. `total_venta`),2) as total_venta
                     FROM `facturas` as fac
                     JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                     WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
                     AND fac.`fecha_factura` <= '".$_GET['fin']."'
                     GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
         } else {
-            $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
+            $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, round(sum(fac. `total_venta`),2) as total_venta
                     FROM `facturas` as fac
                     JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                     WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
@@ -22,7 +22,7 @@ if($_GET['action'] == 'cliente') {
                     GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
         }        
     }else if($_GET['metodo'] == 'all'){
-        $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta
+        $sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, round(sum(fac. `total_venta`),2) as total_venta
             FROM `facturas` as fac
             JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
             GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`";
