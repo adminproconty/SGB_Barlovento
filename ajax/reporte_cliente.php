@@ -31,42 +31,42 @@
 		if($_GET['tipo'] == 'all'){
 
 			$count_query   = mysqli_query($con, "
-            	SELECT count(fac.`id_factura`) as numrows, fac.`numero_factura`, fac.`fecha_factura`, fac.`id_cliente`, 
+            	SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
             	cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
             	FROM `facturas` as fac
             	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
 			");
 			
-			$sql="SELECT fac.`id_factura`, fac.`numero_factura`, fac.`fecha_factura`, 
-                fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+			$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, sum(fac. `total_venta`) as total_venta
                 FROM `facturas` as fac
-                JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)";
+				JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+				GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`";
 
 		}else if($_GET['tipo'] == 'byid'){
 
 			if($_GET['id_cliente'] == 'nada') {
 
 				$count_query   = mysqli_query($con, "
-            		SELECT count(fac.`id_factura`) as numrows, fac.`numero_factura`, fac.`fecha_factura`, fac.`id_cliente`, 
-            		cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+            		SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
+					cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
             		FROM `facturas` as fac
             		JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
             		WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
             		AND fac.`fecha_factura` <= '".$_GET['fin']."'
 				");
 			
-				$sql="SELECT fac.`id_factura`, fac.`numero_factura`, fac.`fecha_factura`, 
-                	fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+				$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, sum(fac. `total_venta`) as total_venta
                 	FROM `facturas` as fac
                 	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                 	WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`";
 
 			} else {
 				
 				$count_query   = mysqli_query($con, "
-            		SELECT count(fac.`id_factura`) as numrows, fac.`numero_factura`, fac.`fecha_factura`, fac.`id_cliente`, 
-            		cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+            		SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
+            	cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
             		FROM `facturas` as fac
             		JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
             		WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
@@ -74,13 +74,13 @@
             		AND fac.`fecha_factura` <= '".$_GET['fin']."'
 				");
 			
-				$sql="SELECT fac.`id_factura`, fac.`numero_factura`, fac.`fecha_factura`, 
-                	fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, fac. `total_venta`
+				$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, sum(fac. `total_venta`) as total_venta
                 	FROM `facturas` as fac
                 	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                 	WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
                 	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+					AND fac.`fecha_factura` <= '".$_GET['fin']."'
+					GROUP BY fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`";
 			}
 		}       
         
@@ -127,8 +127,6 @@
 
 					<th>#</th>
 
-					<th>Fecha</th>
-
 					<th>Documento Cliente</th>
 
 					<th>Nombre Cliente</th>
@@ -145,13 +143,14 @@
 
                         $numero= $row['numero_factura']; 
 
-                        $fecha= date('d/m/Y', strtotime($row['fecha_factura']));    
+                      //  $fecha= date('d/m/Y', strtotime($row['fecha_factura']));    
 
                         $documento=$row['documento_cliente'];
 
 						$nombre=$row['nombre_cliente'];
 
-						$total=$row['total_venta'];
+						$total=number_format($row['total_venta'],2,'.','');
+						
 						
 
 					?>
@@ -161,8 +160,7 @@
 
 						<td><?php echo $numero; ?></td>
 
-						<td><?php echo $fecha; ?></td>
-
+					
 						<td><?php echo $documento; ?></td>
 
 						<td><?php echo $nombre; ?></td>

@@ -6,29 +6,29 @@ require_once ("../config/conexion.php");//Contiene funcion que conecta a la base
 if($_GET['action'] == 'cliente') {
     if($_GET['metodo'] == 'byid'){
         if($_GET['id_cliente'] == 'nada') {
-            $sql="SELECT fac.`numero_factura`, 
-                    fac.`fecha_factura`,  cli.`documento_cliente`,
-                    cli.`nombre_cliente`, fac. `total_venta`
+            $sql="SELECT cli.`documento_cliente`,
+                    cli.`nombre_cliente`, sum(fac. `total_venta`) as total_venta
                     FROM `facturas` as fac
                     JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                     WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                    AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+                    AND fac.`fecha_factura` <= '".$_GET['fin']."'
+                    GROUP BY cli.`documento_cliente`, cli.`nombre_cliente`";
         } else {
-            $sql="SELECT fac.`numero_factura`, 
-                    fac.`fecha_factura`,  cli.`documento_cliente`,
-                    cli.`nombre_cliente`, fac. `total_venta`
+            $sql="SELECT cli.`documento_cliente`,
+                    cli.`nombre_cliente`, sum(fac. `total_venta`) as total_venta
                     FROM `facturas` as fac
                     JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                     WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
                     AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                    AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+                    AND fac.`fecha_factura` <= '".$_GET['fin']."'
+                    GROUP BY cli.`documento_cliente`, cli.`nombre_cliente`";
         }        
     }else if($_GET['metodo'] == 'all'){
-        $sql="SELECT fac.`numero_factura`, 
-            fac.`fecha_factura`,  cli.`documento_cliente`,
-            cli.`nombre_cliente`, fac. `total_venta`
+        $sql="SELECT cli.`documento_cliente`,
+            cli.`nombre_cliente`, sum(fac. `total_venta`) as total_venta
             FROM `facturas` as fac
-            JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)";
+            JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+            GROUP BY cli.`documento_cliente`, cli.`nombre_cliente`";
     }    
 }else if($_GET['action'] == 'producto'){
     if($_GET['metodo'] == 'byid'){
@@ -151,9 +151,10 @@ while($row = mysqli_fetch_row($resultt))  //fetch_table_data
             $schema_insert .= "".$sep;
     }
     $schema_insert = str_replace($sep."$", "", $schema_insert);
+    $schema_insert = str_replace(".", ",", $schema_insert);
     $schema_insert = preg_replace("/\r\n|\n\r|\n|\r/", " ", $schema_insert);
     $schema_insert .= "\t";
-    print(trim($schema_insert));
+    print utf8_decode((trim($schema_insert)));
     print "\n";
 }
 	
