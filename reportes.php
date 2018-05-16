@@ -49,7 +49,7 @@
                         <select class="form-control" id="select_reporte">
 					        <option value="">-- Selecciona tipo de reporte --</option>
 					        <option value="cliente">Ventas por Cliente</option>
-					    <!--    <option value="producto">Productos Vendidos</option> -->
+					        <option value="producto">Productos Vendidos</option> 
 				        </select>
 					</div>
 							
