@@ -55,10 +55,8 @@ if($_GET['action'] == 'cliente') {
                 JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)";
     } 
 }else if($_GET['action'] == 'all'){
-    $sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, 
-            df.`precio_venta`, fac.`id_cliente`, fac.`fecha_factura`,fac.`total_venta`, 
-            fac.`estado_factura`, prod.`codigo_producto`, prod.`nombre_producto`, 
-            cli.`documento_cliente`, cli.`nombre_cliente` 
+    $sql="SELECT fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`,
+                prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, (df.`cantidad` * df.`precio_venta`) as subtotal_venta
             FROM `detalle_factura` as df 
             JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
             JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 

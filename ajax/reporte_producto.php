@@ -28,76 +28,57 @@
 
 		//Count the total number of row in your table*/
 
-		if($_GET['tipo'] == 'all'){
 
-			$count_query   = mysqli_query($con, "
-				SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-				fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-				prod.`nombre_producto` 
-				FROM `detalle_factura` as df 
-				JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-				JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-			");
-			
-			$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
-                	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                	prod.`nombre_producto` 
-                	FROM `detalle_factura` as df 
-                	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)";
-
-		}else if($_GET['tipo'] == 'byid'){
-
-			if($_GET['id_producto'] == 'nada') {
+			if($_GET['id_producto'] == '') {
 
 				$count_query   = mysqli_query($con, "
             		SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
             		fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-            		prod.`nombre_producto` 
+            		prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
             		FROM `detalle_factura` as df 
             		JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
             		JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-            		WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+            		WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+            		AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
         		");
 			
 				$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
                 	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                	prod.`nombre_producto` 
+                	prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
                 	FROM `detalle_factura` as df 
                 	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
                 	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
-                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+                	AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'";
 
 			} else {
 
 				$count_query   = mysqli_query($con, "
             		SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
             		fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-            		prod.`nombre_producto` 
+            		prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
             		FROM `detalle_factura` as df 
             		JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
             		JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
             		WHERE df.`id_producto` = ".$_GET['id_producto']." 
-            		AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-            		AND fac.`fecha_factura` <= '".$_GET['fin']."'
+            		AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+            		AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
         		");
 			
 				$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
                 	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                	prod.`nombre_producto` 
+                	prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
                 	FROM `detalle_factura` as df 
                 	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
                 	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
                 	WHERE df.`id_producto` = ".$_GET['id_producto']." 
-                	AND fac.`fecha_factura` >= '".$_GET['inicio']."' 
-                	AND fac.`fecha_factura` <= '".$_GET['fin']."'";
+                	AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+                	AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'";
 
 			}
 
 			
-		}   
+		
 
 		$row= mysqli_fetch_array($count_query);
 
@@ -131,11 +112,13 @@
 
 			<div class="table-responsive">
 
-			  <table class="table">
+			  <table class="table" id="Exportar_Productos">
 
 				<tr  class="info">
 
 					<th>Fecha</th>
+
+					<th>Vendedor</th>
 
 					<th>Código</th>
 
@@ -155,13 +138,18 @@
 
                         $date= date('d/m/Y', strtotime($row['fecha_factura']));    
 
-                        $cod=$row['codigo_producto'];
+						$vendedor=$row['vendedor'];
+
+
+						$cod=$row['codigo_producto'];
 
 						$nombre=$row['nombre_producto'];
 
 						$cantidad=$row['cantidad'];
 
 						$total=$row['total_venta'];
+
+						$total=$row['vendedor'];
 						
 
 					?>
@@ -171,13 +159,15 @@
 
 						<td><?php echo $date; ?></td>
 
+						<td><?php echo $vendedor; ?></td>
+
 						<td><?php echo $cod; ?></td>
 
 						<td><?php echo $nombre; ?></td>
 
-						<td class="text-center"><?php echo $cantidad; ?></td>
+						<td class="text-center"><?php echo str_replace(".",",",$cantidad); ?></td>
 
-						<td class="text-center">$<?php echo $total;?></td>						
+						<td class="text-center">$<?php echo str_replace(".",",",$total);?></td>						
 
 					</tr>
 
@@ -193,13 +183,18 @@
 
 					<?php
 
-					 echo paginate($reload, $page, $total_pages, $adjacents);
+					 //echo paginate($reload, $page, $total_pages, $adjacents);
 
 					?></span></td>
 
 				</tr>
 
 			  </table>
+
+			<form action="ficheroExcel.php" method="post" target="_blank" id="FormularioExportacion">
+				<input type="hidden" id="datos_a_enviar" name="datos_a_enviar" />
+				<input type="hidden" id="nombre_reporte" name="nombre_reporte" />
+			</form>
 
 			</div>
 

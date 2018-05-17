@@ -48,7 +48,8 @@
 					<div class="col-md-4">
                         <select class="form-control" id="select_reporte">
 					        <option value="">-- Selecciona tipo de reporte --</option>
-					        <option value="cliente">Ventas por Cliente</option>
+					        <option value="cliente">Ventas Agrupadas por Cliente</option>
+							<option value="detalle">Ventas Detalladas por Cliente</option>
 					        <option value="producto">Productos Vendidos</option> 
 				        </select>
 					</div>
@@ -68,18 +69,6 @@
                         <input type="text" class="form-control input-sm" style="display: inline-block; width: 75%;" id="nombre_producto" placeholder="Selecciona un producto">
                         <input id="id_producto" type='hidden' name="id producto">                        
                     </div>
-
-                    <div class="col-md-4">
-                        <label for="q" class="control-label">Desde:</label>
-                        <input type="date" id="desde_producto">
-                        <input type="hidden" id="inicio_producto">
-                    </div>
-
-                    <div class="col-md-4">
-                    <label for="q" class="control-label">Hasta:</label> 
-                        <input type="date" id="hasta_producto">
-                        <input type="hidden" id="fin_producto">
-                    </div>
                 </div>
 
                 <div class="for-group row" id="form_busq_cliente">
@@ -88,19 +77,22 @@
                         <input type="text" class="form-control input-sm" style="display: inline-block; width: 75%;" id="nombre_cliente" placeholder="Selecciona un cliente">
 					    <input id="id_cliente" type='hidden' name="id_cliente">
                     </div>
+                </div>
 
+				<div class="for-group row" id="form_busq_fechas">
                     <div class="col-md-4">
-                        <label for="q" class="control-label">Desde:</label>
-                        <input type="date" id="desde_cliente">
-                        <input type="hidden" id="inicio_cliente">
+                        <label for="q" class="control-label" style="display: inline-block; width: 20%;">Desde:</label>
+                        <input type="date" class="form-control input-sm" style="display: inline-block; width: 75%;" id="desde" placeholder="Desde">
+						<input type="hidden" id="inicio">
                     </div>
 
                     <div class="col-md-4">
-                    <label for="q" class="control-label">Hasta:</label> 
-                        <input type="date" id="hasta_cliente">
-                        <input type="hidden" id="fin_cliente">
+                    	<label for="q" class="control-label" style="display: inline-block; width: 20%;">Hasta:</label>
+                        <input type="date" class="form-control input-sm" style="display: inline-block; width: 75%;" id="hasta" placeholder="Hasta">
+						<input type="hidden" id="fin">
                     </div>
                 </div>
+
 
 			</form>
 				<div id="resultados"></div><!-- Carga los datos ajax -->

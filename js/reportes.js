@@ -3,27 +3,38 @@ $(document).ready(function(){
     load(1);
     init();
     localStorage.setItem('exportar', 0);
-    localStorage.setItem('tipo_exportar', 'nada');
+    localStorage.setItem('tipo_exportar', '');
     localStorage.setItem('metodo_exportar', 'all');
 });
 
 function init() {
     $( "#form_busq_cliente" ).hide( "slow" );
     $( "#form_busq_producto" ).hide( "slow" );
-    getAll();
+    $( "#form_busq_fechas" ).hide( "slow" );
 }
 
+//MUESTRO OCULTO OPCIONES
 function showGetCliente() {
     $( "#form_busq_cliente" ).show( "slow" );
     $( "#form_busq_producto" ).hide( "slow" );
+    $( "#form_busq_fechas" ).show( "slow" );
 }
 
 function showGetProducto() {
     $( "#form_busq_cliente" ).hide( "slow" );
     $( "#form_busq_producto" ).show( "slow" );
+    $( "#form_busq_fechas" ).show( "slow" );
 }
 
+function showGetDetalle() {
+    $( "#form_busq_cliente" ).show( "slow" );
+    $( "#form_busq_producto" ).hide( "slow" );
+    $( "#form_busq_fechas" ).show( "slow" );
+}
+
+//SETEO VARIABLES SEGUN REPORTE
 $( "#select_reporte" ).change(function() {
+    $('#nombre_cliente').val(''); //BLANQUEO CAMPO NOMBRE CADA QUE ESCOJO REPORTE
     var opcion = "";
     $( ".outer_div" ).hide( "slow" );
     localStorage.setItem('exportar', 0);
@@ -38,112 +49,51 @@ $( "#select_reporte" ).change(function() {
             localStorage.setItem('tipo_exportar', 'producto');
             getProductos(0);
         } else {
-            init();
-            localStorage.setItem('tipo_exportar', 'nada');
+            //init();
+            showGetDetalle();
+            localStorage.setItem('tipo_exportar', 'detalle');
+            getDetalle(0);
         }
     });    
 });
 
-$('#desde_producto').change(function(){
+//SETEO VARIABLES FECHAS Y EJECUTO QUERY PARA LLENAR TABLA DE DATOS
+$('#desde').change(function(){
     var fecha = ''+this.value+'';
-    $('#inicio_producto').val(fecha);
+    $('#inicio').val(fecha);
 });
 
-$('#hasta_producto').change(function(){
+$('#hasta').change(function(){
     var fecha = ''+this.value+'';
-    $('#fin_producto').val(fecha);
-    getProductos(1);
+    $('#fin').val(fecha);
+    var valida_repo = localStorage.getItem('tipo_exportar');
+    if (valida_repo == 'cliente'){
+        getClientes(1);
+    } else if (valida_repo == 'producto'){
+        getProductos(1);
+    } else {
+        getDetalle(1);
+    }
 });
 
-$('#desde_cliente').change(function(){
-    var fecha = ''+this.value+'';
-    $('#inicio_cliente').val(fecha);
-});
-
-$('#hasta_cliente').change(function(){
-    var fecha = ''+this.value+'';
-    $('#fin_cliente').val(fecha);
-    getClientes(1);
-});
-
+//EXPORTO TABLA QUE SE MUESTRA EN PANTALLA
 $( "#exportar" ).click(function() {
-    var cantidad = localStorage.getItem('exportar') * 1;
-    if(cantidad > 0) {
-        var tipo_exportar = localStorage.getItem('tipo_exportar');
-        if(tipo_exportar == 'cliente') {
-            exportClientes();
-        }else if(tipo_exportar == 'producto') {
-            exportarProductos();
-        }else{
-            exportarAll();
-        }
-    }else{
-        alert('No hay datos para exportar');        
+    var valida_tipo = localStorage.getItem('tipo_exportar');
+    $("#nombre_reporte").val(valida_tipo);
+    if (valida_tipo == 'cliente'){
+        var formulario = $("#Exportar_Clientes").eq(0).clone();
+    } else if(valida_tipo == 'producto'){
+        var formulario = $("#Exportar_Productos").eq(0).clone();
+    } else {
+        var formulario = $("#Exportar_Detalles").eq(0).clone(); 
     }
-    $("#select_reporte").val('');  
-    $( "#form_busq_cliente" ).hide( "slow" );
-    $( "#form_busq_producto" ).hide( "slow" );
-    $('#desde_producto').val('');
-    $('#hasta_producto').val('');
-    $('#desde_cliente').val('');
-    $('#hasta_cliente').val('');
-    $('#nombre_producto').val('');
-    $('#nombre_cliente').val('');
-    getAll();  
+    
+    $("#datos_a_enviar").val( $("<div>").append(formulario).html());
+    $("#FormularioExportacion").submit();
 });
 
-function exportClientes() {
-    var id_cliente= $("#id_cliente").val();
-    var inicio= $("#inicio_cliente").val();
-    var fin= $("#fin_cliente").val();
-    var nombre_cliente= $("#nombre_cliente").val();
-    if(inicio == '') {
-        inicio = '2000-01-01';
-    }
-    if(fin == '') {
-        fin = '3000-01-01';
-    }
-    $("#loader").fadeIn('slow');
-    var metodo = localStorage.getItem('metodo_exportar');
-    if(metodo == 'all') {
-        window.location.href = './ajax/excel.php?action=cliente&metodo=all';
-    }else if(metodo == 'byid'){
-        if(id_cliente == ''){
-            window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente=nada&inicio='+inicio+'&fin='+fin;
-        }else{
-            window.location.href = './ajax/excel.php?action=cliente&metodo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin+'&nombre_cliente='+nombre_cliente;
-        }
-    }
-}
 
-function exportarProductos() {
-    var id_producto= $("#id_producto").val();
-    var inicio= $("#inicio_producto").val();
-    var fin= $("#fin_producto").val();
-    var nombre_producto= $("#nombre_producto").val();
-    if(inicio == '') {
-        inicio = '2000-01-01';
-    }
-    if(fin == '') {
-        fin = '3000-01-01';
-    }
-    $("#loader").fadeIn('slow');
-    var metodo = localStorage.getItem('metodo_exportar');
-    if(metodo == 'all') {
-        window.location.href = './ajax/excel.php?action=producto&metodo=all';
-    }else if(metodo == 'byid'){
-        if(id_producto == ''){
-            window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto=nada&inicio='+inicio+'&fin='+fin;
-        } else {
-            window.location.href = './ajax/excel.php?action=producto&metodo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin+'&nombre_producto='+nombre_producto;
-        }
-    }
-}
-
-function exportarAll() {
-    window.location.href = './ajax/excel.php?action=all';    
-}
-
+//FUNCIO DE AUTOCOMPLETAR NOMBRE Y PRODUCTO SEGUN REPORTE
 $(function() {
 	$("#nombre_cliente").autocomplete({
         source: "./ajax/autocomplete/clientes.php",
@@ -155,7 +105,14 @@ $(function() {
             $('#tel1').val(ui.item.telefono_cliente);
             $('#mail').val(ui.item.email_cliente);
             $('#saldo_cliente').val(ui.item.saldo_cliente);
-            getClientes(1);
+            
+            //PARA CLIENTES Y DETALLE CLIENTES
+            var valida_repo = localStorage.getItem('tipo_exportar');
+            if (valida_repo == 'cliente'){
+                getClientes(1);
+            } else {
+                getDetalle(1);
+            }
         }
     });
     
@@ -173,103 +130,96 @@ $(function() {
 						
 });	
 
+//CARGO TABLA CON DATOS DE CLIENTE
 function getClientes(tipo) {
+    localStorage.setItem('tipo_exportar', 'cliente');
     var url = '';
-    if(tipo == 0){
-        url = './ajax/reporte_cliente.php?action=ajax&tipo=all';
-        localStorage.setItem('metodo_exportar', 'all');
-        $("#loader").fadeIn('slow');
-	        $.ajax({
-		    url: url,
-		    beforeSend: function(objeto){
-			    $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
-		    },
-		    success:function(data){
-			    $(".outer_div").html(data).fadeIn('slow');
-                $('#loader').html('');
-            }
-	    })
-    }else{
-        var id_cliente= $("#id_cliente").val();
-        var inicio= $("#inicio_cliente").val();
-        var fin= $("#fin_cliente").val();
-        if(inicio == '' || fin == ''){
-            alert('Debe seleccionar un rango de fecha');
-        }else{
-            if(inicio == '') {
-                inicio = '2000-01-01';
-            }
-            if(fin == '') {
-                fin = '3000-01-01';
-            }
-            url = './ajax/reporte_cliente.php?action=ajax&tipo=byid&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
-            localStorage.setItem('metodo_exportar', 'byid');
-            if(id_cliente == ''){
-                url = './ajax/reporte_cliente.php?action=ajax&tipo=byid&id_cliente=nada&inicio='+inicio+'&fin='+fin;
-            }
-            $("#loader").fadeIn('slow');
-	        $.ajax({
-    		    url: url,
-		        beforeSend: function(objeto){
-			        $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
-		        },
-		        success:function(data){
-			        $(".outer_div").html(data).fadeIn('slow');
-                    $('#loader').html('');
-                }
-	        })
-        }    
-    }   
+    var id_cliente= $("#id_cliente").val();
+    var inicio= $("#inicio").val();
+    var fin= $("#fin").val();
+    if(inicio == '') {
+        //inicio = new Date().toJSON().slice(0,10);
+        inicio = '2018-01-01';
+    }
+    if(fin == '') {
+        //fin = new Date().toJSON().slice(0,10);
+        fin = '3000-01-01';
+    }
+
+    url = './ajax/reporte_cliente.php?action=ajax&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+    $("#loader").fadeIn('slow');
+    $.ajax({
+        url: url,
+        beforeSend: function(objeto){
+            $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+        },
+        success:function(data){
+            $(".outer_div").html(data).fadeIn('slow');
+            $('#loader').html('');
+        }
+    })
+}
+
+function getDetalle(tipo) {
+    localStorage.setItem('tipo_exportar', 'cliente');
+    var url = '';
+    var id_cliente= $("#id_cliente").val();
+    var inicio= $("#inicio").val();
+    var fin= $("#fin").val();
+    if(inicio == '') {
+        //inicio = new Date().toJSON().slice(0,10);
+        inicio = '2018-01-01';
+    }
+    if(fin == '') {
+        //fin = new Date().toJSON().slice(0,10);
+        fin = '3000-01-01';
+    }
+
+    url = './ajax/reporte_detalle.php?action=ajax&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+    $("#loader").fadeIn('slow');
+    $.ajax({
+        url: url,
+        beforeSend: function(objeto){
+            $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+        },
+        success:function(data){
+            $(".outer_div").html(data).fadeIn('slow');
+            $('#loader').html('');
+        }
+    })
 }
 
 function getProductos(tipo) {
     var url = '';
-    if(tipo == 0){
-        url = './ajax/reporte_producto.php?action=ajax&tipo=all';
-        localStorage.setItem('metodo_exportar', 'all');
-        $("#loader").fadeIn('slow');
-	    $.ajax({
-    		url: url,
-		    beforeSend: function(objeto){
-			    $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
-		    },
-		    success:function(data){
-			    $(".outer_div").html(data).fadeIn('slow');
-                $('#loader').html('');
-            }
-	    });
-    }else{
-        var id_producto= $("#id_producto").val();
-        var inicio= $("#inicio_producto").val();
-        var fin= $("#fin_producto").val();
-        if(inicio == '' || fin == ''){
-            alert('Debe seleccionar un rango de fecha');
-        }else{
-            if(inicio == '') {
-                inicio = '2000-01-01';
-            }
-            if(fin == '') {
-                fin = '3000-01-01';
-            }
-            url = './ajax/reporte_producto.php?action=ajax&tipo=byid&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin;
-            localStorage.setItem('metodo_exportar', 'byid');
-            if(id_producto == '') {
-                url = './ajax/reporte_producto.php?action=ajax&tipo=byid&id_producto=nada&inicio='+inicio+'&fin='+fin; 
-            }
-            $("#loader").fadeIn('slow');
-            $.ajax({
-                url: url,
-                beforeSend: function(objeto){
-                    $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
-                },
-                success:function(data){
-                    $(".outer_div").html(data).fadeIn('slow');
-                    $('#loader').html('');
-                }
-            });
-        }              
-    }  
+    var id_producto= $("#id_producto").val();
+    var inicio= $("#inicio").val();
+    var fin= $("#fin").val();
+    if(inicio == '') {
+        //inicio = new Date().toJSON().slice(0,10);
+        inicio = '2018-01-01';
+    }
+    if(fin == '') {
+        //fin = new Date().toJSON().slice(0,10);
+        fin = '3000-01-01';
+    }
+     url = './ajax/reporte_producto.php?action=ajax&id_producto='+id_producto+'&inicio='+inicio+'&fin='+fin; 
+    
+    $("#loader").fadeIn('slow');
+    $.ajax({
+        url: url,
+        beforeSend: function(objeto){
+            $('#loader').html('<img src="./img/ajax-loader.gif"> Cargando...');
+        },
+        success:function(data){
+            $(".outer_div").html(data).fadeIn('slow');
+            $('#loader').html('');
+        }
+    });
+                    
+     
 }
+
+
 
 function getAll() {
     var url = './ajax/report_all.php?action=ajax';
