@@ -31,7 +31,7 @@
    			$count_query   = mysqli_query($con, "
    				SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
 				   cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta,
-				   (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+				   (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura
    				FROM `facturas` as fac
    				JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
               		WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
@@ -42,7 +42,7 @@
    			");
    		
    			$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta,
-						(select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+						(select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura
                   	FROM `facturas` as fac
                   	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                   	WHERE fac.`id_cliente` = ".$_GET['id_cliente']."
@@ -54,7 +54,7 @@
    		$count_query   = mysqli_query($con, "
    				SELECT count(fac.`id_cliente`) as numrows, fac.`id_cliente`, 
 				   cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta,
-				   (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+				   (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura
    				FROM `facturas` as fac
    				JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
               		WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
@@ -63,7 +63,7 @@
    			");
    		
    			$sql="SELECT fac.`id_cliente`, cli.`nombre_cliente`, cli.`documento_cliente`, cli.`empresa_cliente`, sum(fac. `total_venta`) as total_venta,
-			   		(select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+			   		(select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura
                   	FROM `facturas` as fac
                   	JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
                   	WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
@@ -105,7 +105,8 @@
 <div class="table-responsive">
    <table class="table" id="Exportar_Clientes">
       <tr  class="info">
-         <th>Documento Cliente</th>
+	  	 <th>Id</th>
+		 <th>Documento Cliente</th>
          <th>Nombre Cliente</th>
          <th>Empresa</th>
 		 <th>Vendedor</th>
@@ -114,27 +115,30 @@
       <?php
          while ($row=mysqli_fetch_array($query)){
          
-                             $numero= $row['numero_factura']; 
-         
-                           //  $fecha= date('d/m/Y', strtotime($row['fecha_factura']));    
-         
-                             $documento=$row['documento_cliente'];
-         
+				$numero= $row['numero_factura']; 
+
+			//  $fecha= date('d/m/Y', strtotime($row['fecha_factura']));    
+
+				$documento=$row['documento_cliente'];
+
          		$nombre=$row['nombre_cliente'];
          
          		$empresa_cliente=$row['empresa_cliente'];
          
-         		$total=number_format($row['total_venta'],2,'.','');
+				$total=number_format($row['total_venta'],2,'.','');
+				 
+				$subtotal=number_format($total/1.12,2,'.','');
          		
          		$vendedor=$row['vendedor'];
          
          	?>
       <tr>
-         <td><?php echo strval($documento); ?></td>
+	  	 <td><?php echo $numero; ?></td>
+		 <td><?php echo strval($documento); ?></td>
          <td><?php echo $nombre; ?></td>
          <td><?php echo $empresa_cliente; ?></td>
 		 <td><?php echo $vendedor; ?></td>
-         <td class="text-center">$<?php echo str_replace(".",",",$total);?></td>
+         <td class="text-center">$<?php echo str_replace(".",",",$subtotal);?></td>
       </tr>
       <?php
          }

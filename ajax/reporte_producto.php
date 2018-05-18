@@ -34,7 +34,8 @@
 				$count_query   = mysqli_query($con, "
             		SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
             		fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-            		prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+					prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura,
+					(df.`cantidad` * df.`precio_venta`) as subtotal_venta
             		FROM `detalle_factura` as df 
             		JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
             		JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
@@ -44,7 +45,8 @@
 			
 				$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
                 	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                	prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+                	prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura,
+					(df.`cantidad` * df.`precio_venta`) as subtotal_venta
                 	FROM `detalle_factura` as df 
                 	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
                 	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
@@ -56,7 +58,8 @@
 				$count_query   = mysqli_query($con, "
             		SELECT count(df.`numero_factura`) AS numrows, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
             		fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-            		prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+					prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura,
+					(df.`cantidad` * df.`precio_venta`) as subtotal_venta
             		FROM `detalle_factura` as df 
             		JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
             		JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
@@ -67,7 +70,8 @@
 			
 				$sql="SELECT df.`numero_factura`, df.`id_producto`, df.`cantidad`, df.`precio_venta`, 
                 	fac.`fecha_factura`,fac.`total_venta`, fac.`estado_factura`, prod.`codigo_producto`, 
-                	prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor
+                	prod.`nombre_producto` , (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor, fac.numero_factura,
+					(df.`cantidad` * df.`precio_venta`) as subtotal_venta
                 	FROM `detalle_factura` as df 
                 	JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
                 	JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)
@@ -116,6 +120,8 @@
 
 				<tr  class="info">
 
+					<th>Id</th>
+
 					<th>Fecha</th>
 
 					<th>Vendedor</th>
@@ -135,6 +141,7 @@
 				<?php
 
 				while ($row=mysqli_fetch_array($query)){
+					    $numero= $row['numero_factura'];  
 
                         $date= date('d/m/Y', strtotime($row['fecha_factura']));    
 
@@ -147,15 +154,19 @@
 
 						$cantidad=$row['cantidad'];
 
-						$total=$row['total_venta'];
+						$total=number_format($row['total_venta'],2,'.','');
 
-						$total=$row['vendedor'];
+						$subtotal=number_format($row['subtotal_venta'],2,'.','');
+
+						$vededor=$row['vendedor'];
 						
 
 					?>
 				
 
 					<tr>
+
+						<td><?php echo $numero; ?></td>
 
 						<td><?php echo $date; ?></td>
 
@@ -167,7 +178,7 @@
 
 						<td class="text-center"><?php echo str_replace(".",",",$cantidad); ?></td>
 
-						<td class="text-center">$<?php echo str_replace(".",",",$total);?></td>						
+						<td class="text-center">$<?php echo str_replace(".",",",$subtotal);?></td>						
 
 					</tr>
 

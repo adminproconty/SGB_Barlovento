@@ -79,6 +79,7 @@ $('#hasta').change(function(){
 //EXPORTO TABLA QUE SE MUESTRA EN PANTALLA
 $( "#exportar" ).click(function() {
     var valida_tipo = localStorage.getItem('tipo_exportar');
+
     $("#nombre_reporte").val(valida_tipo);
     if (valida_tipo == 'cliente'){
         var formulario = $("#Exportar_Clientes").eq(0).clone();
@@ -161,7 +162,7 @@ function getClientes(tipo) {
 }
 
 function getDetalle(tipo) {
-    localStorage.setItem('tipo_exportar', 'cliente');
+    localStorage.setItem('tipo_exportar', 'detalle');
     var url = '';
     var id_cliente= $("#id_cliente").val();
     var inicio= $("#inicio").val();
