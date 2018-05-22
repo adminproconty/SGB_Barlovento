@@ -11,6 +11,7 @@ function init() {
     $( "#form_busq_cliente" ).hide( "slow" );
     $( "#form_busq_producto" ).hide( "slow" );
     $( "#form_busq_fechas" ).hide( "slow" );
+
 }
 
 //MUESTRO OCULTO OPCIONES
@@ -32,6 +33,12 @@ function showGetDetalle() {
     $( "#form_busq_fechas" ).show( "slow" );
 }
 
+function showGetCierre() {
+    $( "#form_busq_cliente" ).hide( "slow" );
+    $( "#form_busq_producto" ).hide( "slow" );
+    $( "#form_busq_fechas" ).show( "slow" );
+}
+
 //SETEO VARIABLES SEGUN REPORTE
 $( "#select_reporte" ).change(function() {
     $('#nombre_cliente').val(''); //BLANQUEO CAMPO NOMBRE CADA QUE ESCOJO REPORTE
@@ -40,6 +47,7 @@ $( "#select_reporte" ).change(function() {
     localStorage.setItem('exportar', 0);
     $( "select option:selected" ).each(function() {
         opcion = $( this ).val();
+
         if (opcion == 'cliente'){
             showGetCliente();
             localStorage.setItem('tipo_exportar', 'cliente');
@@ -48,6 +56,10 @@ $( "#select_reporte" ).change(function() {
             showGetProducto();
             localStorage.setItem('tipo_exportar', 'producto');
             getProductos(0);
+        } else if (opcion == "cierre") {
+            localStorage.setItem('tipo_exportar', 'cierre');
+            showGetCierre();
+
         } else {
             //init();
             showGetDetalle();
@@ -71,6 +83,8 @@ $('#hasta').change(function(){
         getClientes(1);
     } else if (valida_repo == 'producto'){
         getProductos(1);
+    } else if (valida_repo == 'cierre'){
+        getCierre(0);    
     } else {
         getDetalle(1);
     }
@@ -86,11 +100,17 @@ $( "#exportar" ).click(function() {
     } else if(valida_tipo == 'producto'){
         var formulario = $("#Exportar_Productos").eq(0).clone();
     } else {
-        var formulario = $("#Exportar_Detalles").eq(0).clone(); 
+        var formulario = ''; 
+        exportDetalles();
     }
     
-    $("#datos_a_enviar").val( $("<div>").append(formulario).html());
-    $("#FormularioExportacion").submit();
+    if (formulario != ''){
+        $("#datos_a_enviar").val( $("<div>").append(formulario).html());
+        $("#FormularioExportacion").submit();    
+    }
+    
+    limpiarPantalla();
+
 });
 
 
@@ -238,6 +258,7 @@ function getAll() {
 }
 
 function load(page){
+    
     var q= $("#q").val();
 	$("#loader").fadeIn('slow');
 	$.ajax({
@@ -250,4 +271,44 @@ function load(page){
 			$('#loader').html('');					
 		}
 	})
+}
+
+function exportDetalles() {
+    var id_cliente= $("#id_cliente").val();
+    var inicio= $("#inicio").val();
+    var fin= $("#fin").val();
+    if(inicio == '') {
+        inicio = '2000-01-01';
+    }
+    if(fin == '') {
+        fin = '3000-01-01';
+    }
+    $("#loader").fadeIn('slow');
+    window.location.href = './ajax/excel.php?action=detalle&id_cliente='+id_cliente+'&inicio='+inicio+'&fin='+fin;
+}
+
+function getCierre() {
+    var inicio= $("#inicio").val();
+    var fin= $("#fin").val();
+    if(inicio == '') {
+        inicio = '2000-01-01';
+    }
+    if(fin == '') {
+        fin = '3000-01-01';
+    }
+    $("#loader").fadeIn('slow');
+    window.open('./pdf/documentos/cierre_caja.php?fecha_ini=' + inicio + '&fecha_fin=' + fin, 'Factura', '', '1024', '768', 'true');
+}
+
+function limpiarPantalla(){
+    $("#select_reporte").val('');  
+    $("#id_cliente").val('');  
+    $("#id_producto").val('');  
+    init();
+    $('#desde').val('');
+    $('#hasta').val('');
+    $('#nombre_cliente').val('');
+    $(".outer_div").html('');
+    $('#loader').html('');
+
 }

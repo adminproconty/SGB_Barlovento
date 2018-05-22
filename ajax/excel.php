@@ -54,13 +54,18 @@ if($_GET['action'] == 'cliente') {
                 JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
                 JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`)";
     } 
-}else if($_GET['action'] == 'all'){
+}else if($_GET['action'] == 'detalle'){
     $sql="SELECT fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`,
-                prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, (df.`cantidad` * df.`precio_venta`) as subtotal_venta
-            FROM `detalle_factura` as df 
-            JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-            JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
-            JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)";
+    prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, round((df.`cantidad` * df.`precio_venta`),2) as subtotal_venta,
+    cli.`empresa_cliente`, (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor,
+    fac.numero_factura
+    FROM `detalle_factura` as df 
+    JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
+    JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
+    JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
+    WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+    AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
+    ";
 }
 
 if ($con->connect_error) {  //error check
@@ -96,8 +101,8 @@ if($_GET['action'] == 'cliente'){
     }else if($_GET['metodo'] == 'all'){
         $filename = "ConsultaConsumoAllProductos";  //your_file_name
     }
-}else if($_GET['action'] == 'all'){
-    $nombre_reporte = 'REPORTE DE VENTAS GENERAL';
+}else if($_GET['action'] == 'detalle'){
+    $nombre_reporte = 'REPORTE DETALLADO DE CLIENTES';
     $filename = "ConsultaDeTodosLosConsumos";  //your_file_name
 }
 
