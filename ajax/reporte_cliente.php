@@ -29,56 +29,48 @@
    
    	if($_GET['id_cliente'] != ''){
    			$count_query   = mysqli_query($con, "
-   				SELECT COUNT(fac.id_cliente) as numrows
-                    FROM `detalle_factura` as df 
-                    JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                    JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
-                    JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
-					AND fac.`id_cliente` = ".$_GET['id_cliente']."
-                    GROUP BY fac.id_cliente, fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`, cli.`empresa_cliente`, prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, subtotal_venta, cli.`empresa_cliente`, vendedor,
-                        fac.numero_factura
+   				SELECT COUNT(fac.id_cliente) as numrows,
+				cli.id_cliente, cli.documento_cliente, cli.empresa_cliente
+				FROM detalle_factura df, clientes cli, facturas fac
+				WHERE fac.numero_factura = df.numero_factura
+				AND fac.id_cliente = cli.id_cliente
+				AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+				AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
+				AND fac.`id_cliente` = ".$_GET['id_cliente']."
+				GROUP BY cli.nombre_cliente, cli.id_cliente, cli.documento_cliente, cli.empresa_cliente
    				
    			");
    		
-   			$sql="SELECT fac.id_cliente, fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`, cli.`empresa_cliente`,
-                        prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, round((df.`cantidad` * df.`precio_venta`),2) as subtotal_venta, cli.`empresa_cliente`, (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor,
-                        fac.numero_factura
-                    FROM `detalle_factura` as df 
-                    JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                    JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
-                    JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
-					AND fac.`id_cliente` = ".$_GET['id_cliente']."
-                    GROUP BY fac.id_cliente, fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`, cli.`empresa_cliente`, prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, subtotal_venta, cli.`empresa_cliente`, vendedor,
-                        fac.numero_factura";
+   			$sql="SELECT sum(round((df.`cantidad` * df.`precio_venta`),2)) total, cli.nombre_cliente,
+				cli.id_cliente, cli.documento_cliente, cli.empresa_cliente
+				FROM detalle_factura df, clientes cli, facturas fac
+				WHERE fac.numero_factura = df.numero_factura
+				AND fac.id_cliente = cli.id_cliente
+				AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+				AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
+				AND fac.`id_cliente` = ".$_GET['id_cliente']."
+				GROUP BY cli.nombre_cliente, cli.id_cliente, cli.documento_cliente, cli.empresa_cliente";
    				
    	}else{
    		$count_query   = mysqli_query($con, "
-   				SELECT count(fac.id_cliente) as numrows
-                    FROM `detalle_factura` as df 
-                    JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                    JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
-                    JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
-                    GROUP BY fac.id_cliente, fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`, cli.`empresa_cliente`, prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, subtotal_venta, cli.`empresa_cliente`, vendedor,
-                        fac.numero_factura
+   				SELECT COUNT(fac.id_cliente) as numrows,
+				cli.id_cliente, cli.documento_cliente, cli.empresa_cliente
+				FROM detalle_factura df, clientes cli, facturas fac
+				WHERE fac.numero_factura = df.numero_factura
+				AND fac.id_cliente = cli.id_cliente
+				AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+				AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
+				GROUP BY cli.nombre_cliente, cli.id_cliente, cli.documento_cliente, cli.empresa_cliente
    			");
    		
-   			$sql="SELECT fac.id_cliente, fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`, cli.`empresa_cliente`,
-                        prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, round((df.`cantidad` * df.`precio_venta`),2) as subtotal_venta, cli.`empresa_cliente`, (select user_name from users us where us.user_id = fac.id_vendedor) as vendedor,
-                        fac.numero_factura
-                    FROM `detalle_factura` as df 
-                    JOIN `facturas` as fac ON (df.`numero_factura` = fac.`numero_factura`) 
-                    JOIN `products` as prod ON (df.`id_producto` = prod.`id_producto`) 
-                    JOIN `clientes` as cli ON (fac.`id_cliente` = cli.`id_cliente`)
-                	WHERE fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
-					AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
-                    GROUP BY fac.id_cliente, fac.`fecha_factura`, cli.`documento_cliente`, cli.`nombre_cliente`, prod.`codigo_producto`, cli.`empresa_cliente`, prod.`nombre_producto`, df.`cantidad`, df.`precio_venta`, subtotal_venta, cli.`empresa_cliente`, vendedor,
-                        fac.numero_factura";
+   			$sql="SELECT sum(round((df.`cantidad` * df.`precio_venta`),2)) total, cli.nombre_cliente,
+				cli.id_cliente, cli.documento_cliente, cli.empresa_cliente
+				FROM detalle_factura df, clientes cli, facturas fac
+				WHERE fac.numero_factura = df.numero_factura
+				AND fac.id_cliente = cli.id_cliente
+				AND fac.`fecha_factura` >= '".$_GET['inicio']." 00:00:00' 
+				AND fac.`fecha_factura` <= '".$_GET['fin']." 23:59:59'
+				GROUP BY cli.nombre_cliente, cli.id_cliente, cli.documento_cliente, cli.empresa_cliente";
    	}	
    
    
@@ -135,7 +127,7 @@
          
          		$empresa_cliente=$row['empresa_cliente'];
          
-				$total=number_format($row['total_venta'],2,'.','');
+				$total=number_format($row['total'],2,'.','');
 				 
 				$subtotal=number_format($total/1.12,2,'.','');
          		
@@ -148,7 +140,7 @@
          <td><?php echo $nombre; ?></td>
          <td><?php echo $empresa_cliente; ?></td>
 		 <td><?php echo $vendedor; ?></td>
-         <td class="text-center">$<?php echo str_replace(".",",",$subtotal);?></td>
+         <td class="text-center">$<?php echo str_replace(".",",",$total);?></td>
       </tr>
       <?php
          }
