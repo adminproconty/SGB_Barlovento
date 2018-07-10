@@ -64,6 +64,8 @@
 
 			<li class="<?php echo $active_usuarios;?>"><a href="usuarios.php"><i  class='glyphicon glyphicon-lock'></i> Usuarios</a></li>
 
+			<li class="<?php echo $active_kardex;?>"><a href="kardex.php"><i  class='glyphicon glyphicon-list-alt'></i> Kardex</a></li>
+
 			<li class="<?php echo $active_reportes;?>"><a href="reportes.php"><i  class='glyphicon glyphicon-paste'></i> Reportes</a></li>
 
 			<li class="<?php if(isset($active_perfil)){echo $active_perfil;}?>"><a href="perfil.php"><i  class='glyphicon glyphicon-cog'></i> Configuración</a></li>

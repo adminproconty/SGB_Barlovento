@@ -26,6 +26,8 @@
 
 	$active_usuarios="";	
 
+	$active_kardex="";
+
 	$active_perfil="active";	
 
 	$active_reportes="";

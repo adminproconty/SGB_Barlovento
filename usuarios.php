@@ -12,6 +12,7 @@
 	$active_productos="";
 	$active_clientes="";
 	$active_usuarios="active";
+	$active_kardex="";
 	$active_reportes="";
 	$title="Usuarios | SGB";
 ?>

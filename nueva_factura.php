@@ -7,7 +7,8 @@
 	$active_facturas="active";
 	$active_productos="";
 	$active_clientes="";
-	$active_usuarios="";	
+	$active_usuarios="";
+	$active_kardex="";	
 	$active_reportes="";
 	$title="SGB | Registro de Breaks";
 	
