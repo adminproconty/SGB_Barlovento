@@ -304,7 +304,21 @@ if ($numrows>0){
 
       <th class='text-right'>Cantidad</th>
 
+      <?php
+      
+        if (isset($_GET['reporte'])) {
+
+        } else {
+      
+      ?>
+
       <th class='text-right'>Acciones</th>
+
+      <?php
+      
+        }
+
+      ?>
 
    </tr>
 
@@ -367,11 +381,26 @@ if ($numrows>0){
 
       <td><span class='pull-right'><?php echo $cantidad;?></span></td>
 
+      <?php
+      
+        if (isset($_GET['reporte'])) {
+
+        } else {
+    
+      ?>
+
       <td ><span class="pull-right">
 
          <a href="#" class='btn btn-default' title='Editar producto' onclick="obtener_datos('<?php echo $id_producto;?>');" data-toggle="modal" data-target="#productoKardex"><i class="glyphicon glyphicon-edit"></i></a> 
 
       </td>
+
+      <?php
+
+        }
+        
+      ?>
+
 
    </tr>
 
@@ -389,9 +418,13 @@ if ($numrows>0){
 
          <?php
 
+            if (isset($_GET['reporte'])) {
+
+            } else {    
+
             echo paginate($reload, $page, $total_pages, $adjacents);
 
-            
+            }
 
             ?></span>
 
