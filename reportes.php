@@ -53,6 +53,8 @@
 					        <option value="cliente">Ventas Agrupadas por Cliente</option>
 							<option value="detalle">Ventas Detalladas por Cliente</option>
 					        <option value="producto">Productos Vendidos</option> 
+					        <option value="kardex">Movimientos Kardex</option>
+							<option value="stock">Stock de Productos</option>
 				        </select>
 					</div>
 							
@@ -92,6 +94,13 @@
                     	<label for="q" class="control-label" style="display: inline-block; width: 20%;">Hasta:</label>
                         <input type="date" class="form-control input-sm" style="display: inline-block; width: 75%;" id="hasta" placeholder="Hasta">
 						<input type="hidden" id="fin">
+                    </div>
+                </div>
+
+				<div class="for-group row" id="form_busq_stock">
+                    <div class="col-md-4">
+						<label for="producto_reporte" class="control-label" style="display: inline-block; width: 20%;">Producto: </label>
+                        <input type="text" class="form-control input-sm" style="display: inline-block; width: 75%;" id="producto_reporte" onkeyup="getStock()" placeholder="Digite nombre o código del producto">
                     </div>
                 </div>
 
