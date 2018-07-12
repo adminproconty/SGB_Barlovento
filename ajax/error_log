@@ -6,3 +6,12 @@
 [12-Apr-2018 18:21:30 UTC] PHP Fatal error:  require_once(): Failed opening required '../../PHPMailer/class.phpmailer.php' (include_path='.:/opt/alt/php56/usr/share/pear:/opt/alt/php56/usr/share/php') in /home/proco389/public_html/SGB/ajax/buscar_facturas.php on line 35
 [12-Apr-2018 19:02:34 UTC] PHP Warning:  date_format() expects parameter 1 to be DateTimeInterface, string given in /home/proco389/public_html/SGB/ajax/buscar_facturas.php on line 19
 [12-Apr-2018 19:04:55 UTC] PHP Warning:  date_format() expects parameter 1 to be DateTimeInterface, string given in /home/proco389/public_html/SGB/ajax/buscar_facturas.php on line 19
+[06-Jun-2018 20:40:48 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:41:14 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:41:19 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:41:26 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:41:41 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:42:49 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:43:03 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:44:23 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
+[06-Jun-2018 20:44:34 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, boolean given in /home/proco389/public_html/SGB_Asur/ajax/reporte_cliente.php on line 85
