@@ -80,6 +80,8 @@ $simbolo_moneda=get_row('perfil','moneda', 'id_perfil', 1);
 
 	$id_tmp=$row["id_tmp"];
 
+	$id_producto=$row['id_producto'];
+
 	$codigo_producto=$row['codigo_producto'];
 
 	$cantidad=$row['cantidad_tmp'];
@@ -120,7 +122,7 @@ $simbolo_moneda=get_row('perfil','moneda', 'id_perfil', 1);
 
 			<td class='text-right'><?php echo $precio_total_f;?></td>
 
-			<td class='text-center'><a href="#" onclick="eliminar('<?php echo $id_tmp ?>')"><i class="glyphicon glyphicon-trash"></i></a></td>
+			<td class='text-center'><a href="#" onclick="eliminar('<?php echo $id_tmp ?>', <?php echo $i ?>)"><i class="glyphicon glyphicon-trash"></i></a></td>
 
 		</tr>		
 

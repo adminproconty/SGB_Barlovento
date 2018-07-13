@@ -43,6 +43,12 @@
 	exit;
 
 	} else {
+
+		while ($row=mysqli_fetch_array($sql_count)) {
+
+			descontar($con, $row['id_producto'], $row['cantidad_tmp']);
+
+		}
 		
 	  	echo "<script>alert('Consumo Generado con Éxito!!!')</script>";	
 
@@ -88,6 +94,31 @@
 
 	echo '<script>window.location.href = "../../nueva_factura.php";</script>';
 
+
+	function descontar($conexion, $producto, $cantidad) {
+
+		$sql = "SELECT `id_inventario`, `cantidad_inventario` FROM `inventario` WHERE `producto_inventario` = ".$producto;
+		$query=mysqli_query($conexion,$sql);
+		if ($row = mysqli_fetch_array($query)) {
+			$cant = $row['cantidad_inventario'];
+			$id = $row['id_inventario'];
+		}
+		$nuevaCantidad = $cant - $cantidad;
+
+		$sql = "UPDATE `inventario` SET `cantidad_inventario`= ".$nuevaCantidad." WHERE `id_inventario` = ".$id;
+		mysqli_query($conexion, $sql);
+
+		$sql = "INSERT INTO `log_inventario`(`fecha_loginv`, `producto_loginv`, `cantidad_loginv`, 
+					`tipo_loginv`, `motivo_loginv`) VALUES (
+						now(),
+						".$producto.",
+						".$cantidad.",
+						'Venta',
+						'Venta'
+					)";
+		mysqli_query($conexion, $sql);
+
+	}
 	
 
 	//exit;
