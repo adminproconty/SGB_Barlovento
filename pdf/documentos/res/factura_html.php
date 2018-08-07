@@ -120,6 +120,7 @@ table.page_footer {width: 100%; border: none; background-color: white; padding: 
         </tr>
 
 		<?php
+		date_default_timezone_set('America/Bogota');
 		$nums=1;
 		$sumador_total=0;
 		$sql=mysqli_query($con, "select * from products, tmp where products.id_producto=tmp.id_producto and tmp.session_id='".$session_id."'");

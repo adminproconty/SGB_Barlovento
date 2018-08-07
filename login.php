@@ -7,7 +7,7 @@ if (version_compare(PHP_VERSION, '5.3.7', '<')) {
     // (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
     require_once("libraries/password_compatibility_library.php");
 }
-
+date_default_timezone_set('America/Bogota');
 // include the configs / constants for the database connection
 require_once("config/db.php");
 
